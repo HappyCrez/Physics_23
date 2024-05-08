@@ -1,0 +1,115 @@
+:root{
+    --main_light_color: #fff;
+    --main_deep_color: #000;
+    --blocks_color: #020e76; 
+
+    --height: 205px;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    background-color: #fff;
+}
+
+button {
+    border: none;
+}
+
+.bg1{
+    background-color: var(--main_light_color);
+}
+
+.bg2{
+    background-color: var(--main_deep_color);
+}
+
+.text-color1{
+    color: var(--main_light_color);
+}
+
+.text-color2{
+    color: var(--main_deep_color);
+}
+
+.header_info {
+    display: flex;
+    margin: 0 15px;
+    align-self: center;
+}
+
+.headerTitle {
+    width: 70%;
+}
+
+.instructionBtn {
+    width: 30%;
+    text-align: right;
+}
+table {
+    table-layout: fixed;
+} 
+
+td {
+    width: auto;
+}
+
+#track {
+    width: 400px;
+    position: relative;
+    display: block;
+    height: 22px;
+    margin: 20px 0;
+    border: solid 1px #000;
+    overflow: hidden;
+}
+
+#track #thumb {
+    width: 30px;
+    height: 22px;
+    position: absolute;
+    background-color: black;
+    left: 0px;    
+}
+
+#galvanometer {
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+#circle {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border: solid 2px #000;
+    border-radius: 100%;
+}
+
+#line {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    width: 170px;
+    height: 2px;
+    background-color: black;
+}
+
+#arrow {
+    position: absolute;
+    right: 15px;
+}
+
+#arrow::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    display: block;
+    border-right: 2px solid blue;
+    border-bottom: 2px solid blue;
+    width: 15px;
+    height: 15px;
+    transform: translate(-50%, -50%) rotate(-45deg);
+}

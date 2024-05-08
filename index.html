@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/4445/4445241.png" type="image/x-icon">
+
+    <title>Измерение ЭДС</title>
+</head>
+<body>
+    <header>
+        <div class="container pt-5">
+            <div class="row">
+                <div class="col">
+                    <div class="header_info">
+                        <div class="headerTitle">
+                            <h1>Измерение ЭДС</h1> 
+                        </div>
+                        <div class="instructionBtn">
+                            <button class="btn btn-primary" id="instructionBtn">Инструкция</button>
+                        </div>
+                    </div>
+                  <hr>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="instruction visually-hidden"> 
+        <div class="container">
+            <div class="instruct_block">
+                <ul class="list-group list-group-flush mb-5">
+                    <li class="list-group-item"></li>
+                    <li class="list-group-item"></li>
+                    <li class="list-group-item"></li>
+                </ul>
+
+                <ul class="list-group list-group-flush mb-5">
+                    <li class="list-group-item">Примечания:</li>
+                    <li class="list-group-item"></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="laborator">
+        <div class="container">
+            <div class="row mt-4 mb-5">
+                <div class="col-lg-6 col-12 ps-lg-5">
+
+                    <h3>Гальванометр</h3>
+                    
+                    <div id="galvanometer">
+                        <div id="circle">
+                            <div id="line">
+                                <div id="arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12 ps-lg-5">
+                    <h3>Схема подключений</h3>
+                    <img src="assets/scheme.png" />
+
+                    <h3 class="mt-4">Проводник с подвижным контактом</h3>
+                    <div id="track">
+                        <div id="thumb"></div>
+                    </div>
+                    <div class="d-flex">
+                        Длина отрезка AB (по рис):  &nbsp
+                        <div id="length"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row row mt-4 mb-5">
+                <div class="col-lg-6 col-12 ps-lg-5">
+                    
+                    <table class="table table-hover text-center mt-4">
+                        <tr>
+                            <td>ЭДС 1</td>
+                            <td>ЭДС 2</td>
+                            <td>ЭДС 3</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="radio" id="scales" name="scales" checked />
+                            </td>
+                            <td>
+                                <input type="radio" id="scales" name="scales"/>
+                            </td>
+                            <td>
+                                <input type="radio" id="scales" name="scales"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-lg-6 col-12 ps-lg-5 text-center" style="margin:auto;">
+                    <div>
+                        <button class="btn btn-success" id="turnBtn">Включить</button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg2 text-color1 p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center fw-bold">
+                    Design and developer: Happy Crez / Владимир Горбунов ПИ-2X
+                    <br>
+                    Associate Professor: Романенко Вероника Викторовна
+                    <br>
+                    2024 г.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+<script src="js/instruction.js"></script>
+<script src="js/backend.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
