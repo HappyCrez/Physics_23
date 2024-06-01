@@ -112,7 +112,8 @@ function updateGalvanometer(angleRads) {
     
     // Nums and lines on galvanometer face
     for (let x = 20; x < GALVANOMETER_WIDTH; x += 20) {
-        galvanometerCtx.fillText(Math.abs(x-GALVANOMETER_WIDTH/2)/10, x-3, 20);
+        if (x == GALVANOMETER_WIDTH/2) galvanometerCtx.fillText(Math.abs(x-GALVANOMETER_WIDTH/2)/100, x-3, 20);
+        else galvanometerCtx.fillText(Math.abs(x-GALVANOMETER_WIDTH/2)/100, x-5, 20);
         galvanometerCtx.moveTo(x, 30);
         galvanometerCtx.lineTo(x, 40);
     }
@@ -188,7 +189,7 @@ function calculate() {
     let resistBC = calculateWireResist(1-wireAB);
     let ampers = isTurnOn ? calcuteAmpers(resistAB, resistBC, battery_eds) : 0;
     let angle = calculateAngle(ampers);
-
+    console.log(ampers);
     updateWireLen(wireAB);
     updateLinear();
     updateGalvanometer(angle);
