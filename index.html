@@ -40,7 +40,8 @@
 
                 <ul class="list-group list-group-flush mb-5">
                     <li class="list-group-item">Примечания:</li>
-                    <li class="list-group-item"></li>
+                    <li class="list-group-item">Эталонная ЭДС равна 2.1 В</li>
+                    <li class="list-group-item">Значение на гальванометре даны в мА</li>
                 </ul>
             </div>
         </div>
@@ -53,12 +54,13 @@
 
                     <h3>Гальванометр</h3>
                     
-                    <div id="galvanometer">
-                        <div id="circle">
+                    <canvas class="m-auto" id="galvanometer"><!-- Galvanometer --></canvas>
+                    <div  id="galvanometerContainer">
+                        <!-- <div id="circle">
                             <div id="line">
                                 <div id="arrow"></div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="col-lg-6 col-12 ps-lg-5">
@@ -66,9 +68,7 @@
                     <img src="assets/scheme.png" />
 
                     <h3 class="mt-4">Проводник с подвижным контактом</h3>
-                    <div id="track">
-                        <div id="thumb"></div>
-                    </div>
+                    <canvas id="linear"><!-- Wire with movement contact --></canvas>
                     <div class="d-flex">
                         Длина отрезка AB (по рис):  &nbsp
                         <div id="length"></div>
@@ -81,19 +81,23 @@
                     
                     <table class="table table-hover text-center mt-4">
                         <tr>
+                            <td>Эталонная ЭДС</td>
                             <td>ЭДС 1</td>
                             <td>ЭДС 2</td>
                             <td>ЭДС 3</td>
                         </tr>
                         <tr>
                             <td>
-                                <input type="radio" id="scales" name="scales" checked />
+                                <input type="radio" id="std_eds" name="eds" checked />
                             </td>
                             <td>
-                                <input type="radio" id="scales" name="scales"/>
+                                <input type="radio" id="eds1" name="eds"/>
                             </td>
                             <td>
-                                <input type="radio" id="scales" name="scales"/>
+                                <input type="radio" id="eds2" name="eds"/>
+                            </td>
+                            <td>
+                                <input type="radio" id="eds3" name="eds"/>
                             </td>
                         </tr>
                     </table>

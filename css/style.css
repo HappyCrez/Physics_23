@@ -94,6 +94,7 @@ td {
     width: 170px;
     height: 2px;
     background-color: black;
+    transform: rotate(-90deg);
 }
 
 #arrow {
