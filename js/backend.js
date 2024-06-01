@@ -4,7 +4,7 @@ const patrons = [];
 
 const length = document.getElementById('length');
 
-const battery_eds = 7.2734375, std_eds = 1.6, eds1 = 0.8, eds2 = 3.851, eds3 = 2.119, circuit_resistance = 0.1;
+const battery_eds = 7.2734375, std_eds = 1.6, eds1 = 1.2, eds2 = 3.851, eds3 = 2.119, circuit_resistance = 0.1;
 const edsVals = [std_eds, eds1, eds2, eds3];
 const edsBtns = [];
 let currEds = std_eds;
@@ -83,7 +83,7 @@ function calcuteVolts(ampers, wireResist) {
 
 function calcuteAmpers(resistAB, resistBC, batteryEds) {
     let ampers = currEds/resistAB+currEds/resistBC-batteryEds/resistBC; 
-    return (Math.abs(ampers) > 0.02)? ampers : 0;
+    return (Math.abs(ampers) > 0.04)? ampers : 0;
 }
 
 function calculateWireResist(wireLen) {
