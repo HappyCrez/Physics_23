@@ -4,7 +4,7 @@ const patrons = [];
 
 const length = document.getElementById('length');
 
-const battery_eds = 7.2734375, std_eds = 1.6, eds1 = 1.2, eds2 = 3.851, eds3 = 2.119, circuit_resistance = 0.1;
+const battery_eds = 7.2734375, std_eds = 1.6, eds1 = 1.2, eds2 = 3.851, eds3 = 2.119;
 const edsVals = [std_eds, eds1, eds2, eds3];
 const edsBtns = [];
 let currEds = std_eds;
@@ -104,7 +104,7 @@ function updateGalvanometer(angleRads) {
     galvanometerCtx.beginPath();
     galvanometerCtx.fillStyle = "black";
     // Bottom line
-    galvanometerCtx.rect(0, 0, GALVANOMETER_WIDTH, GALVANOMETER_HEIGHT);
+    galvanometerCtx.rect(1, 1, GALVANOMETER_WIDTH-1, GALVANOMETER_HEIGHT-1);
 
     // Arrow
     galvanometerCtx.moveTo(GALVANOMETER_WIDTH/2, GALVANOMETER_HEIGHT);
