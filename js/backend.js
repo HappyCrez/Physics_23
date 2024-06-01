@@ -1,4 +1,4 @@
-const AngleOffset = 0.4;
+const AngleOffset = 0.7;
 
 const patrons = [];
 
@@ -31,7 +31,6 @@ const galvanometerCtx = galvanometer.getContext('2d');
 
 const GALVANOMETER_WIDTH = 200;
 const GALVANOMETER_HEIGHT = 100;
-const GALVANOMETER_RADIUS = GALVANOMETER_WIDTH/2-1;
 
 const turnBtn = document.getElementById('turnBtn');
 let isTurnOn = false;
@@ -105,23 +104,19 @@ function updateGalvanometer(angleRads) {
     galvanometerCtx.beginPath();
     galvanometerCtx.fillStyle = "black";
     // Bottom line
-    galvanometerCtx.moveTo(0, GALVANOMETER_HEIGHT);
-    galvanometerCtx.lineTo(GALVANOMETER_WIDTH, GALVANOMETER_HEIGHT);
-    galvanometerCtx.stroke();
-    
-    galvanometerCtx.arc(GALVANOMETER_WIDTH/2, GALVANOMETER_HEIGHT, GALVANOMETER_RADIUS, Math.PI, 0);
-    
+    galvanometerCtx.rect(0, 0, GALVANOMETER_WIDTH, GALVANOMETER_HEIGHT);
+
     // Arrow
     galvanometerCtx.moveTo(GALVANOMETER_WIDTH/2, GALVANOMETER_HEIGHT);
-    galvanometerCtx.lineTo(GALVANOMETER_WIDTH/2-GALVANOMETER_WIDTH/2*Math.sin(angleRads), GALVANOMETER_HEIGHT-GALVANOMETER_HEIGHT*Math.cos(angleRads) + 30);
-    galvanometerCtx.stroke();
-
-    let temp = 20;
-    for (let x = -10; x < 10; x++) {
-        // circle => x^2+y^2=r^2  =>  x^2=(r^2-y^2)
-        galvanometerCtx.fillText(Math.abs(x), GALVANOMETER_RADIUS-3-x*10, 15+GALVANOMETER_RADIUS-Math.sqrt(GALVANOMETER_RADIUS*GALVANOMETER_RADIUS - x*x*GALVANOMETER_RADIUS));
+    galvanometerCtx.lineTo(GALVANOMETER_WIDTH/2-GALVANOMETER_WIDTH/2*Math.sin(angleRads), GALVANOMETER_HEIGHT-GALVANOMETER_HEIGHT*Math.cos(angleRads) + 20);
+    
+    // Nums and lines on galvanometer face
+    for (let x = 20; x < GALVANOMETER_WIDTH; x += 20) {
+        galvanometerCtx.fillText(Math.abs(x-GALVANOMETER_WIDTH/2)/10, x-3, 20);
+        galvanometerCtx.moveTo(x, 30);
+        galvanometerCtx.lineTo(x, 40);
     }
-
+    galvanometerCtx.stroke();
     galvanometerCtx.fillText("K = 1.5", GALVANOMETER_WIDTH/2+20, GALVANOMETER_HEIGHT-10);
     galvanometerCtx.closePath();
 
@@ -185,26 +180,27 @@ function calculateAngle(angle) {
     if (angle > Math.PI/2-AngleOffset) angle = Math.PI/2-AngleOffset;
     if (angle < -Math.PI/2+AngleOffset) angle = -Math.PI/2+AngleOffset;
     return angle;
-} 
-
-//let lastTime = new Date().getTime(); 
-// function animateArrow() {
-//     window.requestAnimationFrame(animateArrow);
-//     // let dt = new Date().getTime() - lastTime;
-//     // lastTime = new Date().getTime();
-    
-// }
-// animateArrow();
+}
 
 // recalculate volts and ampers on every changed parametr 
 function calculate() {    
     let resistAB = calculateWireResist(wireAB);
     let resistBC = calculateWireResist(1-wireAB);
     let ampers = isTurnOn ? calcuteAmpers(resistAB, resistBC, battery_eds) : 0;
-    console.log(ampers);
     let angle = calculateAngle(ampers);
 
     updateWireLen(wireAB);
     updateLinear();
     updateGalvanometer(angle);
 }
+
+// TODO::Animate arrow
+// let lastTime = new Date().getTime(); 
+// function animateArrow() {
+//     window.requestAnimationFrame(animateArrow);
+//     let dt = new Date().getTime() - lastTime;
+//     lastTime = new Date().getTime();
+    
+//     console.log(dt);
+// }
+// animateArrow();
