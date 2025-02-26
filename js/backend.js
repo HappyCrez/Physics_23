@@ -1,10 +1,6 @@
-const AngleOffset = 0.7;
-
-const patrons = [];
-
 const length = document.getElementById('length');
 
-const battery_eds = 7.2734375, std_eds = 1.6, eds1 = 1.2, eds2 = 3.851, eds3 = 2.119;
+const battery_eds = 7.2734375, std_eds = 2.1, eds1 = 1.2, eds2 = 3.851, eds3 = 2.119;
 const edsVals = [std_eds, eds1, eds2, eds3];
 const edsBtns = [];
 let currEds = std_eds;
@@ -31,9 +27,17 @@ const galvanometerCtx = galvanometer.getContext('2d');
 
 const GALVANOMETER_WIDTH = 200;
 const GALVANOMETER_HEIGHT = 100;
-
+const CENTER_X = GALVANOMETER_WIDTH/2;
+    
 const turnBtn = document.getElementById('turnBtn');
 let isTurnOn = false;
+
+const ANGLE_OFFSET = 0.265;
+let arrowAngle = 0;
+let currentArrowAngle = arrowAngle;
+let currentSpeed = 0;
+let maxSpeed = 0.01;
+let acceleration = 0;
 
 function setup() {
     linear.width = LINEAR_WIDTH;
@@ -41,8 +45,8 @@ function setup() {
 
     galvanometer.width = GALVANOMETER_WIDTH;
     galvanometer.height = GALVANOMETER_HEIGHT;
-
-    edsBtns.push(document.getElementById('std_eds'));
+ 
+   edsBtns.push(document.getElementById('std_eds'));
     edsBtns.push(document.getElementById('eds1'));
     edsBtns.push(document.getElementById('eds2'));
     edsBtns.push(document.getElementById('eds3'));
@@ -54,6 +58,7 @@ function setup() {
     });
 
     calculate();
+    updateGalvanometer(0);
 }
 setup();
 
@@ -105,20 +110,54 @@ function updateGalvanometer(angleRads) {
     galvanometerCtx.fillStyle = "black";
     // Bottom line
     galvanometerCtx.rect(1, 1, GALVANOMETER_WIDTH-1, GALVANOMETER_HEIGHT-1);
-
-    // Arrow
-    galvanometerCtx.moveTo(GALVANOMETER_WIDTH/2, GALVANOMETER_HEIGHT);
-    galvanometerCtx.lineTo(GALVANOMETER_WIDTH/2-GALVANOMETER_WIDTH/2*Math.sin(angleRads), GALVANOMETER_HEIGHT-GALVANOMETER_HEIGHT*Math.cos(angleRads) + 20);
     
+    // Galvanometer arrow
+    const ARROW_LEN = 65;
+
+    let arrowCoef = 1/Math.tan(Math.abs(angleRads));
+    let arrowX = Math.sqrt((ARROW_LEN*ARROW_LEN)/(1+arrowCoef*arrowCoef));
+    let arrowY = arrowX*arrowCoef;
+
+    if (angleRads == 0) {
+	arrowX = 0;
+	arrowY = ARROW_LEN;
+	sight = 0;
+    }
+    else if (angleRads > 0) sight = 1;
+    else sight = -1;
+    
+    galvanometerCtx.moveTo(CENTER_X, GALVANOMETER_HEIGHT);
+    galvanometerCtx.lineTo(CENTER_X+arrowX*sight, GALVANOMETER_HEIGHT-arrowY);
+
+    const DASH_COUNT = 6
     // Nums and lines on galvanometer face
-    for (let x = 20; x < GALVANOMETER_WIDTH; x += 20) {
-        if (x == GALVANOMETER_WIDTH/2) galvanometerCtx.fillText(Math.abs(x-GALVANOMETER_WIDTH/2)/100, x-3, 20);
-        else galvanometerCtx.fillText(Math.abs(x-GALVANOMETER_WIDTH/2)/100, x-5, 20);
-        galvanometerCtx.moveTo(x, 30);
-        galvanometerCtx.lineTo(x, 40);
+    // Center dash with '0' num
+    galvanometerCtx.moveTo(CENTER_X,20);
+    galvanometerCtx.lineTo(CENTER_X,30);
+    galvanometerCtx.fillText('0',CENTER_X-3,16);
+
+    // Another dashes
+    for (let i = 1; i < DASH_COUNT; i++) {
+	// calculate Position of every dash in galvnometer "-"
+	const RADIUS_LEN = 70;
+	const SUM_LEN = RADIUS_LEN+10;
+
+	let lineCoef = Math.tan(((15*i)*Math.PI)/180);
+	let x0 = Math.sqrt((RADIUS_LEN*RADIUS_LEN)/(1+lineCoef*lineCoef));
+	let x1 = Math.sqrt((SUM_LEN*SUM_LEN)/(1+lineCoef*lineCoef));
+
+	// Right part of galvanometer
+	galvanometerCtx.moveTo(CENTER_X+x0,GALVANOMETER_HEIGHT-lineCoef*x0);
+	galvanometerCtx.lineTo(CENTER_X+x1,GALVANOMETER_HEIGHT-lineCoef*x1);
+	galvanometerCtx.fillText((DASH_COUNT-i)/5,CENTER_X+x1+2,GALVANOMETER_HEIGHT-lineCoef*x1-4);
+	
+	// Left part of galvanometer
+	galvanometerCtx.moveTo(CENTER_X-x0,GALVANOMETER_HEIGHT-lineCoef*x0);
+	galvanometerCtx.lineTo(CENTER_X-x1,GALVANOMETER_HEIGHT-lineCoef*x1);
+	galvanometerCtx.fillText((DASH_COUNT-i)/5,CENTER_X-x1-15,GALVANOMETER_HEIGHT-lineCoef*x1-4);
     }
     galvanometerCtx.stroke();
-    galvanometerCtx.fillText("K = 1.5", GALVANOMETER_WIDTH/2+20, GALVANOMETER_HEIGHT-10);
+    galvanometerCtx.fillText("K = 1.5", CENTER_X+20, GALVANOMETER_HEIGHT-10);
     galvanometerCtx.closePath();
 
     galvanometerCtx.beginPath();
@@ -174,12 +213,13 @@ document.onmouseup = function(event) {
     isClicked = false;
 }
 
-// galvanometer
-const line = document.getElementById('line');
+function calculateAngle(ampers) {
+    arrowAngle = verifyArrowBound(ampers*1.3);
+}
 
-function calculateAngle(angle) {
-    if (angle > Math.PI/2-AngleOffset) angle = Math.PI/2-AngleOffset;
-    if (angle < -Math.PI/2+AngleOffset) angle = -Math.PI/2+AngleOffset;
+function verifyArrowBound(angle) {   
+    if (angle > Math.PI/2-ANGLE_OFFSET ) angle = Math.PI/2-ANGLE_OFFSET;
+    if (angle < -Math.PI/2+ANGLE_OFFSET) angle = -Math.PI/2+ANGLE_OFFSET;
     return angle;
 }
 
@@ -188,20 +228,46 @@ function calculate() {
     let resistAB = calculateWireResist(wireAB);
     let resistBC = calculateWireResist(1-wireAB);
     let ampers = isTurnOn ? calcuteAmpers(resistAB, resistBC, battery_eds) : 0;
-    let angle = calculateAngle(ampers);
-    console.log(ampers);
+
+    calculateAngle(ampers);
+    calculateAcceleration();
+    
     updateWireLen(wireAB);
     updateLinear();
-    updateGalvanometer(angle);
 }
 
-// TODO::Animate arrow
-// let lastTime = new Date().getTime(); 
-// function animateArrow() {
-//     window.requestAnimationFrame(animateArrow);
-//     let dt = new Date().getTime() - lastTime;
-//     lastTime = new Date().getTime();
+function calculateAcceleration() {
+    if (!isTurnOn) return;
+    acceleration = Math.abs(1-arrowAngle+currentArrowAngle);
+}    
+
+// Arrow animation
+let lastTime = new Date().getTime();
+let angelIsBigger = true;
+function animateArrow() {
+    window.requestAnimationFrame(animateArrow);
+    let dt = new Date().getTime() - lastTime;
+    lastTime = new Date().getTime();
+
+    if (currentArrowAngle<arrowAngle) {
+	if (angelIsBigger == true) {
+	    acceleration *= 2;
+	    angelIsBigger = false;
+	}
+	currentSpeed += dt/100000*acceleration;
+	if (currentSpeed>maxSpeed) currentSpeed = maxSpeed;
+    }
+    else if (currentArrowAngle>arrowAngle) {
+	if (angelIsBigger == false) {
+	    acceleration *= 2;
+	    angelIsBigger = true;
+	}
+	currentSpeed -= dt/100000*acceleration;
+	if (currentSpeed<-maxSpeed) currentSpeed = -maxSpeed;
+    }
     
-//     console.log(dt);
-// }
-// animateArrow();
+    currentArrowAngle += currentSpeed;
+    currentArrowAngle = verifyArrowBound(currentArrowAngle);
+    updateGalvanometer(currentArrowAngle);
+}
+animateArrow();
